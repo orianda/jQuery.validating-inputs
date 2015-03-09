@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>jQuery.validating-inputs - hidden</title>
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery.values/dist/jQuery.values-1.0.0.min.js"></script>
+    <script type="text/javascript" src="../../jQuery.validating/src/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css"/>
+    <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+    <script type="text/javascript" src="../dist/jQuery.validating-inputs-0.0.0.js"></script>
+    <script type="text/javascript">
+        jQuery( function( $ ) {
+            "use strict";
+
+            var input = $('<input type="text" value=" messy "/>');
+
+            QUnit.config.reorder = false;
+
+            QUnit.test('trim',function(assert){
+                assert.equal(input.val(),' messy ');
+                assert.equal(input.validatingInputs.controller.length,10);
+                input.validatingInputs().then(function(){
+                    assert.ok(true);
+                    assert.equal(input.val(),' messy ');
+                },function(){
+                    assert.ok(false);
+                });
+                input.data('trim',true);
+                input.validatingInputs().then(function(){
+                    assert.ok(true);
+                    assert.equal(input.val(),'messy');
+                },function(){
+                    assert.ok(false);
+                });
+            });
+
+        } );
+    </script>
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+</body>
+</html>

@@ -1,4 +1,6 @@
-(function ($) {
+/*global controller */
+
+(function () {
     "use strict";
 
     /**
@@ -9,16 +11,24 @@
 
     /**
      * Trim input element value
-     * @param {jQuery} input
+     * @param {jQuery} element
      */
-    function trim(input) {
-        input.val($.trim(input.val()));
+    function trim(element) {
+        $.each(element.locals.value, function (index, value) {
+            value = $.trim(value);
+            if (value.length) {
+                element.locals.value[index] = value;
+            } else {
+                delete element.locals.value[index];
+            }
+        });
+        element.val(element.locals.value.join(','));
     }
 
     /**
      * Native trim
      */
-    $.validating.prepend([
+    controller.append([
         'input[type=email]',
         'input[type=url]',
         'input[type=tel]',
@@ -31,22 +41,22 @@
         'input[type=time]',
         'input[type=week]',
         'input[type=month]'
-    ].join(','), trim, true);
+    ].join(','), trim);
 
     /**
      * Trim by option
      */
-    $.validating.prepend([
-        'input[type=hidden][data-trim]',
-        'input[type=text][data-trim]',
-        'input[type=password][data-trim]',
-        'input[type=search][data-trim]',
-        'input[type=textarea][data-trim]'
-    ].join(','), function (input) {
-        var trim = $.trim(input.data('trim'));
-        if (regex.test(trim)) {
-            trim(input);
+    controller.append([
+        'input[type=hidden]',
+        'input[type=text]',
+        'input[type=password]',
+        'input[type=search]',
+        'textarea'
+    ].join(','), function (element) {
+        var trimValue = $.trim(element.data('trim'));
+        if (regex.test(trimValue)) {
+            trim(element);
         }
-    }, true);
+    });
 
-}(jQuery));
+}());

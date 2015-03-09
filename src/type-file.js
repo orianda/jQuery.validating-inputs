@@ -1,16 +1,7 @@
-(function ($) {
-    "use strict";
+/*global controller, prop */
 
-    /**
-     * Check property of input element
-     * @param {jQuery} input
-     * @param {string} property
-     * @returns {bool}
-     */
-    function prop(input, property) {
-        var check = input.prop(property);
-        return typeof check === 'undefined' ? $.trim(input.attr(property)).toLowerCase() === property : !!check;
-    }
+(function () {
+    "use strict";
 
     /**
      * Escapes string to be used in regular expressions.
@@ -47,18 +38,16 @@
     }
 
     /**
-     * Validate file inputs
+     * Register validator
      */
-    $.validating.append('input[type=file]', function (input) {
-        var name = input.attr('name') || '',
-            value = input.values()[name],
-            accepts,
-            typeIndex, typeLength, fileIndex, fileLength;
-        value = value instanceof window.FileList ? value : value instanceof window.File ? [value] : [];
-        if (!value.length && prop(input, 'required')) {
-            return 'required';
+    controller.append('input[type=file]', function (element) {
+        var value = element.locals.value,
+            required = prop(element, 'required'),
+            accepts, typeIndex, typeLength, fileIndex, fileLength;
+        if (!value.length && required) {
+            return'required';
         }
-        accepts = $.trim(input.attr('accept')).split(/|,/);
+        accepts = $.trim(element.attr('accept')).split(/|,/);
         $.each(accepts, function (index, accept) {
             accepts[index] = glob2regex(accept);
         });
@@ -74,6 +63,6 @@
                 return 'accept';
             }
         }
-    }, true);
+    });
 
-}(jQuery));
+}());

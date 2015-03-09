@@ -6,7 +6,7 @@ gulp.task('jshint', 'JsHint check for source files.', function () {
     var jshint = require('gulp-jshint');
     return gulp.src('src/**/*.js')
         .pipe(jshint({
-            lookup: true
+            lookup : true
         }))
         .pipe(jshint.reporter('default'))
         .pipe(jshint.reporter('fail'));
@@ -18,14 +18,31 @@ gulp.task('cleanup', 'Remove dist folder and its content.', function (callback) 
 });
 
 gulp.task('build:script', 'Concatenate script files into one file and prepend the banner.', function () {
-    var concat = require('gulp-concat'),
+    var replace = require('gulp-replace'),
+        concat = require('gulp-concat'),
+        wrap = require('gulp-wrap'),
         header = require('gulp-header'),
         pkg = require('./package.json'),
         fs = require('fs'),
         banner = fs.readFileSync('banner.txt', 'utf8');
-    return gulp.src('src/**/*.js')
+    return gulp.src([
+        'src/setup.js',
+        'src/init.js',
+        'src/data-trim.js',
+        'src/attr-disabled.js',
+        'src/attr-required.js',
+        'src/type-pattern.js',
+        'src/attr-pattern.js',
+        'src/attr-length.js',
+        'src/type-quantity.js',
+        'src/type-file.js',
+        'src/module.js'
+    ])
+        .pipe(replace(/\s*\/\*global\s.*?\*\//ig, ''))
+        .pipe(replace(/\s*(["'])use strict\1;/ig, ''))
         .pipe(concat(pkg.name + '-' + pkg.version + '.js'))
-        .pipe(header(banner, {pkg: pkg}))
+        .pipe(wrap({src : 'src/capsule.txt'}))
+        .pipe(header(banner, {pkg : pkg}))
         .pipe(gulp.dest('dist'));
 });
 
@@ -35,12 +52,12 @@ gulp.task('build:compress', 'Compress script files.', function () {
         rename = require('gulp-rename');
     return gulp.src('dist/**/*.js')
         .pipe(rename({
-            suffix: '.min'
+            suffix : '.min'
         }))
         .pipe(sourcemaps.init())
         .pipe(uglify({
-            output: {
-                comments: /@preserve|@license|@cc_on/i
+            output : {
+                comments : /@preserve|@license|@cc_on/i
             }
         }))
         .pipe(sourcemaps.write('.'))
