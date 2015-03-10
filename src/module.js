@@ -2,6 +2,8 @@
 
 /**
  * jQuery module to validate all inputs contained by the selection and there nodes
+ * @see http://www.w3.org/html/wg/drafts/html/master/forms.html#the-input-element
+ * @see http://www.w3.org/TR/html-markup/datatypes.html
  * @param {boolean} [notify=false]
  * @returns {promise}
  */

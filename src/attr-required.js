@@ -29,14 +29,8 @@ controller.append([
         i, l;
     for (i = 0, l = value.length; i < l; i++) {
         if (value[i].length) {
-            break;
+            return true;
         }
     }
-    if (i === l) {
-        if (required) {
-            return'required';
-        } else {
-            return false;
-        }
-    }
+    return required ? 'required' : false;
 });

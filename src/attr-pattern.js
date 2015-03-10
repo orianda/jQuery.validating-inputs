@@ -12,10 +12,12 @@ controller.append([
     'input[type=tel][pattern]'
 ].join(','), function (element) {
     "use strict";
-    var pattern = new RegExp('^' + element.attr('pattern') + '$');
-    $.each(element.locals.value, function () {
-        if (!pattern.test(this)) {
-            return'pattern';
+    var value = element.locals.value,
+        pattern = new RegExp('^' + element.attr('pattern') + '$'),
+        i, l;
+    for (i = 0, l = value.length; i < l; i++) {
+        if (!pattern.test(value[i])) {
+            return 'pattern';
         }
-    });
+    }
 });

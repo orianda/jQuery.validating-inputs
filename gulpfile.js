@@ -28,8 +28,8 @@ gulp.task('build:script', 'Concatenate script files into one file and prepend th
     return gulp.src([
         'src/setup.js',
         'src/init.js',
-        'src/data-trim.js',
         'src/attr-disabled.js',
+        'src/data-trim.js',
         'src/attr-required.js',
         'src/type-pattern.js',
         'src/attr-pattern.js',

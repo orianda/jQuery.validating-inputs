@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>jQuery.validating-inputs - hidden</title>
+    <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery.values/dist/jQuery.values-1.0.0.min.js"></script>
+    <script type="text/javascript" src="../../jQuery.validating/src/index.js"></script>
+    <link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css"/>
+    <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
+    <script type="text/javascript" src="../dist/jQuery.validating-inputs-0.0.0.js"></script>
+    <script type="text/javascript">
+        jQuery(function ($) {
+            "use strict";
+
+            var config, test;
+
+            /**
+             * Test configuration
+             * @type {Object}
+             */
+            config = {
+                '<input type="hidden"/>'                                                           : {
+                    disabled : {
+                        pass : true
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : true
+                    },
+                    required : {
+                        pass  : true,
+                        value : 'test'
+                    },
+                    type     : {
+                        pass : true
+                    },
+                    pattern  : {
+                        pass    : true,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length   : {
+                        pass     : true,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity : {
+                        pass     : true,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    step     : {
+                        pass      : true,
+                        base      : 0.5,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
+                '<input type="text"/>'                                                             : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : true
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test'
+                    },
+                    type     : {
+                        pass : true
+                    },
+                    pattern  : {
+                        pass    : false,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity : {
+                        pass     : true,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    step     : {
+                        pass      : true,
+                        base      : 0.5,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
+                '<input type="password"/>'                                                         : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : true
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test'
+                    },
+                    type     : {
+                        pass : true
+                    },
+                    pattern  : {
+                        pass    : false,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity : {
+                        pass     : true,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    step     : {
+                        pass      : true,
+                        base      : 0.5,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
+                '<input type="search"/>'                                                           : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : true
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test'
+                    },
+                    type     : {
+                        pass : true
+                    },
+                    pattern  : {
+                        pass    : false,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity : {
+                        pass     : true,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    step     : {
+                        pass      : true,
+                        base      : 0.5,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
+                '<input type="email"/>'                                                            : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test@example.com'
+                    },
+                    type     : {
+                        pass : false
+                    },
+                    pattern  : {
+                        pass    : false,
+                        valid   : 'text@example.com',
+                        invalid : 'test@example.com',
+                        pattern : 'text@example[.]com'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : 'a@w.de',
+                        hepValue : 'a1234@a1234.de',
+                        maxValue : 'a123456789@a123456789.de'
+                    }
+                },
+                '<input type="url"/>'                                                              : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'http://example.com'
+                    },
+                    type     : {
+                        pass : false
+                    },
+                    pattern  : {
+                        pass    : false,
+                        valid   : 'http://example.com',
+                        invalid : 'http://example.de',
+                        pattern : '.+[.]com$'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : 'http://ex.com',
+                        hepValue : 'http://www.example.com',
+                        maxValue : 'http://www.example.com/somewhere'
+                    }
+                },
+                '<input type="tel"/>'                                                              : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test'
+                    },
+                    type     : {
+                        pass : true
+                    },
+                    pattern  : {
+                        pass    : false,
+                        valid   : '017423456789',
+                        invalid : '0174 - 234 567 89',
+                        pattern : '[0-9]+'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    }
+                },
+                '<input type="color"/>'                                                            : {
+                    disabled : {
+                        pass : false
+                    },
+                    pattern  : {
+                        pass    : true,
+                        valid   : '#123456',
+                        invalid : '#abcdef',
+                        pattern : '#[0-9]+'
+                    },
+                    length   : {
+                        pass     : true,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    }
+                },
+                '<input type="number"/>'                                                           : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : 10
+                    },
+                    length   : {
+                        pass     : true,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity : {
+                        pass     : false,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    step     : {
+                        pass      : false,
+                        base      : 0.5,
+                        step      : 3,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
+                '<input type="range"/>'                                                            : {
+                    disabled : {
+                        pass : false
+                    },
+                    quantity : {
+                        pass     : false,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    step     : {
+                        pass      : false,
+                        base      : 0.5,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
+                '<input type="datetime"/>'                                                         : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : '2012-12-12T12:12:00Z'
+                    },
+                    type     : {
+                        pass : false
+                    }
+                },
+                '<input type="datetime-local"/>'                                                   : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : '2012-12-12T12:12:00'
+                    },
+                    type     : {
+                        pass : false
+                    }
+                },
+                '<input type="date"/>'                                                             : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : '2012-12-12'
+                    },
+                    type     : {
+                        pass : false
+                    }
+                },
+                '<input type="time"/>'                                                             : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : '12:12:00'
+                    },
+                    type     : {
+                        pass : false
+                    }
+                },
+                '<input type="week"/>'                                                             : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : '2012-W12'
+                    },
+                    type     : {
+                        pass : false
+                    }
+                },
+                '<input type="month"/>'                                                            : {
+                    disabled : {
+                        pass : false
+                    },
+                    trim     : {
+                        value : ' space ',
+                        pass  : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : '2012-12'
+                    },
+                    type     : {
+                        pass : false
+                    }
+                },
+                '<input type="radio" value="radio"/>'                                              : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass : false
+                    }
+                },
+                '<input type="checkbox" value="checkbox"/>'                                        : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass : false
+                    }
+                },
+                '<input type="file"/>'                                                             : {
+                    disabled : {
+                        pass : false
+//                    },
+//                    required : { //todo: not testable because of browser security restrictions
+//                        pass  : false,
+//                        value : '2012-12'
+                    }
+                },
+                '<select><option value="">---</option><option value="test">Test</option></select>' : {
+                    disabled : {
+                        pass : false
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test'
+                    }
+                },
+                '<textarea></textarea>'                                                            : {
+                    trim     : {
+                        value : ' space ',
+                        pass  : true
+                    },
+                    required : {
+                        pass  : false,
+                        value : 'test'
+                    },
+                    pattern  : {
+                        pass    : true,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length   : {
+                        pass     : false,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    }
+                }
+            };
+
+            test = {
+
+                /**
+                 * Test disabled
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                disabled : function (input, config, assert) {
+                    var pass;
+
+                    function check() {
+                        assert.ok(pass, 'reached callback');
+                    }
+
+                    $.fn.validatingInputs.controller.append('*', check);
+                    assert.equal($.fn.validatingInputs.controller.length, 11, 'amount 11');
+
+                    input.prop('disabled', true);
+                    pass = config.pass;
+                    input.validatingInputs();
+                    input.prop('disabled', false);
+                    pass = true;
+                    input.validatingInputs();
+
+                    input = $('<fieldset></fieldset>').append(input);
+                    input.prop('disabled', true);
+                    pass = config.pass;
+                    input.validatingInputs();
+                    input.prop('disabled', false);
+                    pass = true;
+                    input.validatingInputs();
+
+                    $.fn.validatingInputs.controller.remove('*', check);
+                    assert.equal($.fn.validatingInputs.controller.length, 10, 'amount 10');
+                },
+
+                /**
+                 * Test trim
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                trim : function (input, config, assert) {
+                    input.val(config.value);
+                    assert.equal(input.val(), config.value, 'init');
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'valid');
+                        assert.equal(input.val(), config.value, 'virgin');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fails');
+                        assert.equal(error, 'type', 'fail type');
+                    });
+                    input.data('trim', true);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'valid');
+                        assert.equal(input.val(), $.trim(config.value), 'done');
+                    }, function () {
+                        assert.ok(!config.pass, 'fails');
+                        assert.equal(input.val(), $.trim(config.value), 'done');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                required : function (input, config, assert) {
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function () {
+                        assert.ok(false, 'fail');
+                    });
+                    input.prop('required', true);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'required', 'Required error');
+                    });
+                    if (input.is('input[type=radio], input[type=checkbox]')) {
+                        input.prop('checked', true);
+                    } else {
+                        input.val(config.value);
+                    }
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, undefined);
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                type : function (input, config, assert) {
+                    input.val('invalid');
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                        assert.equal(input.val(), 'invalid', 'value');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'type', 'error');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                pattern : function (input, config, assert) {
+                    input.attr('pattern', config.pattern);
+                    input.val(config.valid);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                        assert.equal(input.val(), config.valid, 'value');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'pattern', 'error');
+                    });
+                    input.val(config.invalid);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                        assert.equal(input.val(), config.invalid, 'value');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'pattern', 'error');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                length : function (input, config, assert) {
+                    input.attr('minlength', 15);
+                    input.attr('maxlength', 20);
+                    input.val(config.minValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'minlength', 'error');
+                    });
+                    input.val(config.hopValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'minlength', 'error');
+                    });
+                    input.val(config.maxValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'maxlength', 'error');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                quantity : function (input, config, assert) {
+                    input.attr('min', config.min);
+                    input.attr('max', config.max);
+                    input.val(config.minValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'min', 'error');
+                    });
+                    input.val(config.hopValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'min', 'error');
+                    });
+                    input.val(config.maxValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'max', 'error');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                step : function (input, config, assert) {
+                    input.val(config.passValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                    input.val(config.failValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+
+                    input.attr('step', 'any');
+                    input.val(config.passValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                    input.val(config.failValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+
+                    input.attr('min', config.base);
+                    input.val(config.passValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                    input.val(config.failValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+
+                    input.attr('step', config.step);
+                    input.val(config.passValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                    input.val(config.failValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                }
+            };
+
+            QUnit.test('validator amount', function (assert) {
+                assert.equal($.fn.validatingInputs.controller.length, 10);
+            });
+
+            $.each(config, function (html, config) {
+                $.each(config, function (name, config) {
+                    QUnit.test('Test ' + name + ' for ' + html, function (assert) {
+                        var input = $(html);
+                        test[name](input, config, assert);
+                    });
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+</body>
+</html>

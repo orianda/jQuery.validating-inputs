@@ -1,7 +1,7 @@
 /*global controller */
 
 /**
- * Register minLength and maxlength validator
+ * Register minLength and maxLength validator
  */
 controller.append([
     'input[type=text][minlength]',
@@ -20,14 +20,16 @@ controller.append([
     'textarea[maxlength]'
 ].join(','), function (element) {
     "use strict";
-    var minLength = parseInt(element.attr('minlength'), 10),
-        maxLength = parseInt(element.attr('maxlength'), 10);
-    $.each(element.locals.value, function () {
-        if (this.length < minLength) {
+    var value = element.locals.value,
+        minLength = parseInt(element.attr('minlength'), 10),
+        maxLength = parseInt(element.attr('maxlength'), 10),
+        i, l;
+    for (i = 0, l = value.length; i < l; i++) {
+        if (value[i].length < minLength) {
             return 'minlength';
         }
-        if (this.length > maxLength) {
+        if (value[i].length > maxLength) {
             return 'maxlength';
         }
-    });
+    }
 });

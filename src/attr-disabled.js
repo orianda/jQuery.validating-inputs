@@ -30,6 +30,6 @@ controller.append([
         if (prop(element, 'disabled')) {
             return false;
         }
-        element = element.closest('fieldset');
+        element = element.parent().closest('fieldset');
     }
 });

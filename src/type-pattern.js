@@ -5,6 +5,7 @@
 
     /**
      * Native type patterns
+     * @see http://www.w3.org/TR/html-markup/datatypes.html
      * @type {Object}
      */
     var patterns = {

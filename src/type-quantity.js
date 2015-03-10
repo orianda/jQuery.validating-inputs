@@ -6,7 +6,34 @@
     var patterns, config;
 
     /**
+     * Set exponent of number
+     * @param {number} number
+     * @param {number} exponent
+     * @returns {number}
+     */
+    function power(number, exponent) {
+        var parts = number.toString().split('E');
+        parts[1] = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+        parts[1] += exponent;
+        return parseFloat(parts.join('E'));
+    }
+
+    /**
+     * Extracting fraction and exponent
+     * @param {number} number
+     * @returns {number}
+     */
+    function exponent(number) {
+        var parts = number.toString().split('E'),
+            exp = parts.length > 1 ? parseInt(parts[1], 10) : 0;
+        parts = parts[0].split('.');
+        exp += parts.length > 1 ? parts[1].length : 0;
+        return exp;
+    }
+
+    /**
      * Type patterns
+     * @see http://www.w3.org/TR/html-markup/datatypes.html
      * @type {Object}
      */
     patterns = {
@@ -22,6 +49,7 @@
 
     /**
      * Default values, formatter and parsers for the validation of the step attribute.
+     * @see http://www.w3.org/TR/html-markup/datatypes.html
      */
     config = {
 
@@ -368,7 +396,7 @@
              * Default base for week type
              * @type {number}
              */
-            base : -259200000,
+            base : 259200000,
 
             /**
              * Default step for week type
@@ -427,32 +455,6 @@
     };
 
     /**
-     * Set exponent of number
-     * @param {number} number
-     * @param {number} exponent
-     * @returns {number}
-     */
-    function power(number, exponent) {
-        var parts = number.toString().split('E');
-        parts[1] = parts.length > 1 ? parseInt(parts[1], 10) : 0;
-        parts[1] += exponent;
-        return parseFloat(parts.join('E'));
-    }
-
-    /**
-     * Extracting fraction and exponent
-     * @param {number} number
-     * @returns {number}
-     */
-    function exponent(number) {
-        var parts = number.toString().split('E'),
-            exp = parts.length > 1 ? parseInt(parts[1], 10) : 0;
-        parts = parts[0].split('.');
-        exp += parts.length > 1 ? parts[1].length : 0;
-        return exp;
-    }
-
-    /**
      * Register validator
      */
     controller.append([
@@ -471,7 +473,6 @@
             step = $.trim(element.attr('step')),
             value = config[type].parse(element.locals.value[0]),
             gait, base, exp;
-        window.console && window.console.log(element,type,element.locals.value,value);
         if (isNaN(value)) {
             return 'type';
         } else if (min > value) {
