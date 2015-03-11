@@ -2,7 +2,7 @@
  * jQuery.validating-inputs
  * jQuery plugin to validate form input elements
  *
- * @version v1.0.0
+ * @version v1.0.1
  * @link https://github.com/orianda/jQuery.validating-inputs
  * @author Orianda <orianda@paan.de>
  * @license MIT
@@ -40,6 +40,7 @@ function isUndefined(value) {
  * Prepare controller for subsequent validators
  */
 controller.append([
+    'input:not([type])',
     'input[type=hidden]',
     'input[type=text]',
     'input[type=password]',
@@ -75,6 +76,7 @@ controller.append([
  * Prevent validating if the input is disabled
  */
 controller.append([
+    'input:not([type])',
     'input[type=text]',
     'input[type=password]',
     'input[type=search]',
@@ -118,15 +120,16 @@ controller.append([
      * @param {jQuery} element
      */
     function trim(element) {
-        $.each(element.locals.value, function (index, value) {
+        var values = element.locals.value;
+        $.each(values, function (index, value) {
             value = $.trim(value);
             if (value.length) {
-                element.locals.value[index] = value;
+                values[index] = value;
             } else {
-                delete element.locals.value[index];
+                delete values[index];
             }
         });
-        element.val(element.locals.value.join(','));
+        element.val(values.join(','));
     }
 
     /**
@@ -151,6 +154,7 @@ controller.append([
      * Trim by option
      */
     controller.append([
+        'input:not([type])',
         'input[type=hidden]',
         'input[type=text]',
         'input[type=password]',
@@ -170,6 +174,7 @@ controller.append([
  * Register validator
  */
 controller.append([
+    'input:not([type])',
     'input[type=text]',
     'input[type=password]',
     'input[type=search]',
@@ -252,6 +257,7 @@ controller.append([
  * Register validator
  */
 controller.append([
+    'input[pattern]:not([type])',
     'input[type=text][pattern]',
     'input[type=password][pattern]',
     'input[type=search][pattern]',
@@ -274,6 +280,8 @@ controller.append([
  * Register minLength and maxLength validator
  */
 controller.append([
+    'input[minlength]:not([type])',
+    'input[maxlength]:not([type])',
     'input[type=text][minlength]',
     'input[type=text][maxlength]',
     'input[type=password][minlength]',

@@ -4,6 +4,8 @@
  * Register minLength and maxLength validator
  */
 controller.append([
+    'input[minlength]:not([type])',
+    'input[maxlength]:not([type])',
     'input[type=text][minlength]',
     'input[type=text][maxlength]',
     'input[type=password][minlength]',

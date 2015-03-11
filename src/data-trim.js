@@ -14,15 +14,16 @@
      * @param {jQuery} element
      */
     function trim(element) {
-        $.each(element.locals.value, function (index, value) {
+        var values = element.locals.value;
+        $.each(values, function (index, value) {
             value = $.trim(value);
             if (value.length) {
-                element.locals.value[index] = value;
+                values[index] = value;
             } else {
-                delete element.locals.value[index];
+                delete values[index];
             }
         });
-        element.val(element.locals.value.join(','));
+        element.val(values.join(','));
     }
 
     /**
@@ -47,6 +48,7 @@
      * Trim by option
      */
     controller.append([
+        'input:not([type])',
         'input[type=hidden]',
         'input[type=text]',
         'input[type=password]',

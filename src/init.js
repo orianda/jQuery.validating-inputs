@@ -4,6 +4,7 @@
  * Prepare controller for subsequent validators
  */
 controller.append([
+    'input:not([type])',
     'input[type=hidden]',
     'input[type=text]',
     'input[type=password]',

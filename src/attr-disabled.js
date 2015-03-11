@@ -4,6 +4,7 @@
  * Prevent validating if the input is disabled
  */
 controller.append([
+    'input:not([type])',
     'input[type=text]',
     'input[type=password]',
     'input[type=search]',

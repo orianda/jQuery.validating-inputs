@@ -1,6 +1,6 @@
 {
   "name": "jQuery.validating-inputs",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "jQuery plugin to validate form input elements",
   "homepage": "https://github.com/orianda/jQuery.validating-inputs",
   "main": "src/index.js",

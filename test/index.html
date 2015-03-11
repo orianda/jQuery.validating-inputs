@@ -4,11 +4,11 @@
     <meta charset="utf-8"/>
     <title>jQuery.validating-inputs - hidden</title>
     <script type="text/javascript" src="../bower_components/jquery/dist/jquery.min.js"></script>
-    <script type="text/javascript" src="../bower_components/jquery.values/dist/jQuery.values-1.0.0.min.js"></script>
+    <script type="text/javascript" src="../bower_components/jquery.values/dist/jQuery.values-1.0.1.min.js"></script>
     <script type="text/javascript" src="../bower_components/jquery.validating/dist/jQuery.validating-2.0.0.js"></script>
     <link rel="stylesheet" type="text/css" href="../bower_components/qunit/qunit/qunit.css"/>
     <script type="text/javascript" src="../bower_components/qunit/qunit/qunit.js"></script>
-    <script type="text/javascript" src="../dist/jQuery.validating-inputs-1.0.0.js"></script>
+    <script type="text/javascript" src="../dist/jQuery.validating-inputs-1.0.1.js"></script>
     <script type="text/javascript">
         jQuery(function ($) {
             "use strict";
@@ -20,6 +20,47 @@
              * @type {Object}
              */
             config = {
+                '<input/>'                                                             : {
+                    disabled   : {
+                        pass : false
+                    },
+                    trim       : {
+                        value : ' space ',
+                        pass  : true
+                    },
+                    required   : {
+                        pass  : false,
+                        value : 'test'
+                    },
+                    type       : {
+                        pass : true
+                    },
+                    pattern    : {
+                        pass    : false,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length     : {
+                        pass     : false,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity   : {
+                        pass     : true,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    stepNative : {
+                        pass      : true,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
+                },
                 '<input type="hidden"/>'                                                           : {
                     disabled   : {
                         pass : true
@@ -681,6 +722,7 @@
                  */
                 trim : function (input, config, assert) {
                     input.val(config.value);
+                    window.console && window.console.log(input.attr('type'),input.val());
                     assert.equal(input.val(), config.value, 'init');
                     input.validatingInputs().then(function () {
                         assert.ok(config.pass, 'valid');
@@ -689,7 +731,9 @@
                         assert.ok(!config.pass, 'fails');
                         assert.equal(error, 'type', 'fail type');
                     });
+                    window.console && window.console.log(input.attr('type'),input.val());
                     input.data('trim', true);
+                    window.console && window.console.log(input.attr('type'),input.val());
                     input.validatingInputs().then(function () {
                         assert.ok(config.pass, 'valid');
                         assert.equal(input.val(), $.trim(config.value), 'done');
@@ -697,6 +741,7 @@
                         assert.ok(!config.pass, 'fails');
                         assert.equal(input.val(), $.trim(config.value), 'done');
                     });
+                    window.console && window.console.log(input.attr('type'),input.val());
                 },
 
                 /**
@@ -956,6 +1001,9 @@
             });
 
             $.each(config, function (html, config) {
+                if(html!=='<input/>') {
+                    return;
+                }
                 $.each(config, function (name, config) {
                     QUnit.test('Test ' + name + ' for ' + html, function (assert) {
                         var input = $(html);

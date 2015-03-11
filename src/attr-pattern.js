@@ -4,6 +4,7 @@
  * Register validator
  */
 controller.append([
+    'input[pattern]:not([type])',
     'input[type=text][pattern]',
     'input[type=password][pattern]',
     'input[type=search][pattern]',
