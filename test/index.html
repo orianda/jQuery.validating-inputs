@@ -21,33 +21,33 @@
              */
             config = {
                 '<input type="hidden"/>'                                                           : {
-                    disabled : {
+                    disabled   : {
                         pass : true
                     },
-                    trim     : {
+                    trim       : {
                         value : ' space ',
                         pass  : true
                     },
-                    required : {
+                    required   : {
                         pass  : true,
                         value : 'test'
                     },
-                    type     : {
+                    type       : {
                         pass : true
                     },
-                    pattern  : {
+                    pattern    : {
                         pass    : true,
                         valid   : 'katze',
                         invalid : 'miau',
                         pattern : 'katze'
                     },
-                    length   : {
+                    length     : {
                         pass     : true,
                         minValue : '123',
                         hepValue : '123456789012345',
                         maxValue : '12345678901234567890123456'
                     },
-                    quantity : {
+                    quantity   : {
                         pass     : true,
                         min      : 8,
                         max      : 12,
@@ -55,41 +55,40 @@
                         hopValue : 10,
                         maxValue : 15
                     },
-                    step     : {
+                    stepNative : {
                         pass      : true,
-                        base      : 0.5,
                         passValue : 10,
                         failValue : 10.5
                     }
                 },
                 '<input type="text"/>'                                                             : {
-                    disabled : {
+                    disabled   : {
                         pass : false
                     },
-                    trim     : {
+                    trim       : {
                         value : ' space ',
                         pass  : true
                     },
-                    required : {
+                    required   : {
                         pass  : false,
                         value : 'test'
                     },
-                    type     : {
+                    type       : {
                         pass : true
                     },
-                    pattern  : {
+                    pattern    : {
                         pass    : false,
                         valid   : 'katze',
                         invalid : 'miau',
                         pattern : 'katze'
                     },
-                    length   : {
+                    length     : {
                         pass     : false,
                         minValue : '123',
                         hepValue : '123456789012345',
                         maxValue : '12345678901234567890123456'
                     },
-                    quantity : {
+                    quantity   : {
                         pass     : true,
                         min      : 8,
                         max      : 12,
@@ -97,41 +96,40 @@
                         hopValue : 10,
                         maxValue : 15
                     },
-                    step     : {
+                    stepNative : {
                         pass      : true,
-                        base      : 0.5,
                         passValue : 10,
                         failValue : 10.5
                     }
                 },
                 '<input type="password"/>'                                                         : {
-                    disabled : {
+                    disabled   : {
                         pass : false
                     },
-                    trim     : {
+                    trim       : {
                         value : ' space ',
                         pass  : true
                     },
-                    required : {
+                    required   : {
                         pass  : false,
                         value : 'test'
                     },
-                    type     : {
+                    type       : {
                         pass : true
                     },
-                    pattern  : {
+                    pattern    : {
                         pass    : false,
                         valid   : 'katze',
                         invalid : 'miau',
                         pattern : 'katze'
                     },
-                    length   : {
+                    length     : {
                         pass     : false,
                         minValue : '123',
                         hepValue : '123456789012345',
                         maxValue : '12345678901234567890123456'
                     },
-                    quantity : {
+                    quantity   : {
                         pass     : true,
                         min      : 8,
                         max      : 12,
@@ -139,41 +137,40 @@
                         hopValue : 10,
                         maxValue : 15
                     },
-                    step     : {
+                    stepNative : {
                         pass      : true,
-                        base      : 0.5,
                         passValue : 10,
                         failValue : 10.5
                     }
                 },
                 '<input type="search"/>'                                                           : {
-                    disabled : {
+                    disabled   : {
                         pass : false
                     },
-                    trim     : {
+                    trim       : {
                         value : ' space ',
                         pass  : true
                     },
-                    required : {
+                    required   : {
                         pass  : false,
                         value : 'test'
                     },
-                    type     : {
+                    type       : {
                         pass : true
                     },
-                    pattern  : {
+                    pattern    : {
                         pass    : false,
                         valid   : 'katze',
                         invalid : 'miau',
                         pattern : 'katze'
                     },
-                    length   : {
+                    length     : {
                         pass     : false,
                         minValue : '123',
                         hepValue : '123456789012345',
                         maxValue : '12345678901234567890123456'
                     },
-                    quantity : {
+                    quantity   : {
                         pass     : true,
                         min      : 8,
                         max      : 12,
@@ -181,9 +178,8 @@
                         hopValue : 10,
                         maxValue : 15
                     },
-                    step     : {
+                    stepNative : {
                         pass      : true,
-                        base      : 0.5,
                         passValue : 10,
                         failValue : 10.5
                     }
@@ -278,20 +274,20 @@
                     }
                 },
                 '<input type="number"/>'                                                           : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : 10
                     },
-                    length   : {
+                    length       : {
                         pass     : true,
                         minValue : '123',
                         hepValue : '123456789012345',
                         maxValue : '12345678901234567890123456'
                     },
-                    quantity : {
+                    quantity     : {
                         pass     : false,
                         min      : 8,
                         max      : 12,
@@ -299,31 +295,47 @@
                         hopValue : 10,
                         maxValue : 15
                     },
-                    step     : {
+                    stepNative   : {
                         pass      : false,
-                        base      : 0.5,
-                        step      : 3,
                         passValue : 10,
                         failValue : 10.5
+                    },
+                    stepBase     : {
+                        pass      : false,
+                        base      : 0.5,
+                        passValue : 10.5,
+                        failValue : 10
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 3,
+                        passValue : 9,
+                        failValue : 10
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : 1,
+                        step      : 3,
+                        passValue : 10,
+                        failValue : 9
                     }
                 },
                 '<input type="range"/>'                                                            : {
                     disabled : {
                         pass : false
-                    },
-                    quantity : {
-                        pass     : false,
-                        min      : 8,
-                        max      : 12,
-                        minValue : 5,
-                        hopValue : 10,
-                        maxValue : 15
-                    },
-                    step     : {
-                        pass      : false,
-                        base      : 0.5,
-                        passValue : 10,
-                        failValue : 10.5
+//                    },
+//                    quantity : {  //todo step has auto correction, so these tests do not fail
+//                        pass     : true,
+//                        min      : 8,
+//                        max      : 12,
+//                        minValue : 5,
+//                        hopValue : 10,
+//                        maxValue : 15
+//                    },
+//                    stepNative     : {
+//                        pass      : false,
+//                        passValue : 10,
+//                        failValue : 10.5
                     }
                 },
                 '<input type="datetime"/>'                                                         : {
@@ -340,6 +352,30 @@
                     },
                     type     : {
                         pass : false
+                    },
+                    stepNative   : {
+                        pass      : false,
+                        passValue : '2012-12-12T12:12:00Z',
+                        failValue : '2012-12-12T12:12:12Z'
+                    },
+                    stepBase     : {
+                        pass      : false,
+                        base      : '2001-12-12T12:12:12Z',
+                        passValue : '2012-12-12T12:12:12Z',
+                        failValue : '2012-12-12T12:12:00Z'
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 5 * 1000,
+                        passValue : '2012-12-12T12:12:00Z',
+                        failValue : '2012-12-12T12:12:03Z'
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : '2001-12-12T12:12:12Z',
+                        step      : 5 * 1000,
+                        passValue : '2012-12-12T12:12:17Z',
+                        failValue : '2012-12-12T12:12:13Z'
                     }
                 },
                 '<input type="datetime-local"/>'                                                   : {
@@ -356,6 +392,30 @@
                     },
                     type     : {
                         pass : false
+                    },
+                    stepNative   : {
+                        pass      : false,
+                        passValue : '2012-12-12T12:12:00',
+                        failValue : '2012-12-12T12:12:12'
+                    },
+                    stepBase     : {
+                        pass      : false,
+                        base      : '2001-12-12T12:12:12',
+                        passValue : '2012-12-12T12:12:12',
+                        failValue : '2012-12-12T12:12:00'
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 5 * 1000,
+                        passValue : '2012-12-12T12:12:00',
+                        failValue : '2012-12-12T12:12:03'
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : '2001-12-12T12:12:12',
+                        step      : 5 * 1000,
+                        passValue : '2012-12-12T12:12:17',
+                        failValue : '2012-12-12T12:12:13'
                     }
                 },
                 '<input type="date"/>'                                                             : {
@@ -372,6 +432,30 @@
                     },
                     type     : {
                         pass : false
+                    },
+                    stepNative   : {
+                        pass      : true,
+                        passValue : '2012-12-12',
+                        failValue : '2004-02-29'
+                    },
+                    stepBase     : {
+                        pass      : true,
+                        base      : '2001-12-12',
+                        passValue : '2012-12-12',
+                        failValue : '2012-12-13'
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 3 * 24 * 60 * 60 * 1000,
+                        passValue : '2012-12-10',
+                        failValue : '2012-12-12'
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : '2001-12-12',
+                        step      : 3 * 24 * 60 * 60 * 1000,
+                        passValue : '2012-12-11',
+                        failValue : '2012-12-12'
                     }
                 },
                 '<input type="time"/>'                                                             : {
@@ -388,6 +472,30 @@
                     },
                     type     : {
                         pass : false
+                    },
+                    stepNative   : {
+                        pass      : false,
+                        passValue : '12:12:00',
+                        failValue : '12:12:12'
+                    },
+                    stepBase     : {
+                        pass      : false,
+                        base      : '12:12:12',
+                        passValue : '12:12:12',
+                        failValue : '12:12:13'
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 5 * 1000,
+                        passValue : '12:12:00',
+                        failValue : '12:12:03'
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : '12:12:12',
+                        step      : 5 * 1000,
+                        passValue : '12:12:17',
+                        failValue : '12:12:13'
                     }
                 },
                 '<input type="week"/>'                                                             : {
@@ -404,6 +512,30 @@
                     },
                     type     : {
                         pass : false
+                    },
+                    stepNative   : {
+                        pass      : true,
+                        passValue : '2012-W12',
+                        failValue : '2012-W13'
+                    },
+                    stepBase     : {
+                        pass      : true,
+                        base      : '2012-W12',
+                        passValue : '2012-W13',
+                        failValue : '2012-W14'
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 14 * 24 * 60 * 60 * 1000,
+                        passValue : '2012-W13',
+                        failValue : '2012-W12'
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : '2012-W12',
+                        step      : 14 * 24 * 60 * 60 * 1000,
+                        passValue : '2012-W14',
+                        failValue : '2012-W13'
                     }
                 },
                 '<input type="month"/>'                                                            : {
@@ -420,6 +552,30 @@
                     },
                     type     : {
                         pass : false
+                    },
+                    stepNative   : {
+                        pass      : true,
+                        passValue : '2012-10',
+                        failValue : '2012-11'
+                    },
+                    stepBase     : {
+                        pass      : true,
+                        base      : '2012-10',
+                        passValue : '2012-11',
+                        failValue : '2012-12'
+                    },
+                    stepStep     : {
+                        pass      : false,
+                        step      : 5,
+                        passValue : '2012-11',
+                        failValue : '2012-12'
+                    },
+                    stepBaseStep : {
+                        pass      : false,
+                        base      : '2012-01',
+                        step      : 5,
+                        passValue : '2013-06',
+                        failValue : '2012-07'
                     }
                 },
                 '<input type="radio" value="radio"/>'                                              : {
@@ -688,7 +844,7 @@
                  * @param {Object} config
                  * @param {Object} assert
                  */
-                step : function (input, config, assert) {
+                stepNative : function (input, config, assert) {
                     input.val(config.passValue);
                     input.validatingInputs().then(function () {
                         assert.ok(true, 'pass');
@@ -719,7 +875,15 @@
                         assert.ok(false, 'fail');
                         assert.equal(error, 'step', 'error');
                     });
+                },
 
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                stepBase : function (input, config, assert) {
                     input.attr('min', config.base);
                     input.val(config.passValue);
                     input.validatingInputs().then(function () {
@@ -730,18 +894,51 @@
                     });
                     input.val(config.failValue);
                     input.validatingInputs().then(function () {
+                        assert.ok(config.pass, 'pass');
+                    }, function (error) {
+                        assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                stepStep : function (input, config, assert) {
+                    input.attr('step', config.step);
+                    input.val(config.passValue);
+                    input.validatingInputs().then(function () {
                         assert.ok(true, 'pass');
                     }, function (error) {
                         assert.ok(false, 'fail');
                         assert.equal(error, 'step', 'error');
                     });
-
-                    input.attr('step', config.step);
-                    input.val(config.passValue);
+                    input.val(config.failValue);
                     input.validatingInputs().then(function () {
                         assert.ok(config.pass, 'pass');
                     }, function (error) {
                         assert.ok(!config.pass, 'fail');
+                        assert.equal(error, 'step', 'error');
+                    });
+                },
+
+                /**
+                 * Test required
+                 * @param {jQuery} input
+                 * @param {Object} config
+                 * @param {Object} assert
+                 */
+                stepBaseStep : function (input, config, assert) {
+                    input.attr('min', config.base);
+                    input.attr('step', config.step);
+                    input.val(config.passValue);
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'pass');
+                    }, function (error) {
+                        assert.ok(false, 'fail');
                         assert.equal(error, 'step', 'error');
                     });
                     input.val(config.failValue);

@@ -1,7 +1,310 @@
-/*global controller */
+/*!
+ * jQuery.validating-inputs
+ * jQuery plugin to validate form input elements
+ *
+ * @version v1.0.0
+ * @link https://github.com/orianda/jQuery.validating-inputs
+ * @author Orianda <orianda@paan.de>
+ * @license MIT
+ */
+(function($){
+    "use strict";
+
+    /**
+ * Validating controller
+ */
+var controller = $.Validating();
+
+/**
+ * Check property of input element
+ * @param {jQuery} element
+ * @param {string} property
+ * @returns {bool}
+ */
+function prop(element, property) {
+    var check = element.prop(property);
+    return typeof check === 'undefined' ? $.trim(element.attr(property)).toLowerCase() === property : !!check;
+}
+
+/**
+ * Is value undefined?
+ * @param {*} value
+ * @returns {boolean}
+ */
+function isUndefined(value) {
+    return typeof value === 'undefined';
+}
+
+
+/**
+ * Prepare controller for subsequent validators
+ */
+controller.append([
+    'input[type=hidden]',
+    'input[type=text]',
+    'input[type=password]',
+    'input[type=search]',
+    'input[type=email]',
+    'input[type=url]',
+    'input[type=tel]',
+    'input[type=color]',
+    'input[type=number]',
+    'input[type=range]',
+    'input[type=datetime]',
+    'input[type=datetime-local]',
+    'input[type=date]',
+    'input[type=time]',
+    'input[type=week]',
+    'input[type=month]',
+    'input[type=radio]',
+    'input[type=checkbox]',
+    'input[type=file]',
+    'select',
+    'textarea'
+].join(','), function (element) {
+    var name = element.attr('name') || '',
+        value = element.values()[name];
+    element.locals = {
+        name  : name,
+        value : value instanceof Array ? value : isUndefined(value) ? [] : [value]
+    };
+});
+
+
+/**
+ * Prevent validating if the input is disabled
+ */
+controller.append([
+    'input[type=text]',
+    'input[type=password]',
+    'input[type=search]',
+    'input[type=email]',
+    'input[type=url]',
+    'input[type=tel]',
+    'input[type=color]',
+    'input[type=number]',
+    'input[type=range]',
+    'input[type=datetime]',
+    'input[type=datetime-local]',
+    'input[type=date]',
+    'input[type=time]',
+    'input[type=week]',
+    'input[type=month]',
+    'input[type=radio]',
+    'input[type=checkbox]',
+    'input[type=file]',
+    'select',
+    'textarea'
+].join(','), function (element) {
+    while (element.length) {
+        if (prop(element, 'disabled')) {
+            return false;
+        }
+        element = element.parent().closest('fieldset');
+    }
+});
+
 
 (function () {
-    "use strict";
+
+    /**
+     * Regular expression to test trim attribute value
+     * @type {RegExp}
+     */
+    var regex = /^true|on|1|yes|trim$/i;
+
+    /**
+     * Trim input element value
+     * @param {jQuery} element
+     */
+    function trim(element) {
+        $.each(element.locals.value, function (index, value) {
+            value = $.trim(value);
+            if (value.length) {
+                element.locals.value[index] = value;
+            } else {
+                delete element.locals.value[index];
+            }
+        });
+        element.val(element.locals.value.join(','));
+    }
+
+    /**
+     * Native trim
+     */
+    controller.append([
+        'input[type=email]',
+        'input[type=url]',
+        'input[type=tel]',
+        'input[type=color]',
+        'input[type=number]',
+        'input[type=range]',
+        'input[type=date]',
+        'input[type=datetime]',
+        'input[type=datetime-local]',
+        'input[type=time]',
+        'input[type=week]',
+        'input[type=month]'
+    ].join(','), trim);
+
+    /**
+     * Trim by option
+     */
+    controller.append([
+        'input[type=hidden]',
+        'input[type=text]',
+        'input[type=password]',
+        'input[type=search]',
+        'textarea'
+    ].join(','), function (element) {
+        var trimValue = $.trim(element.data('trim'));
+        if (regex.test(trimValue)) {
+            trim(element);
+        }
+    });
+
+}());
+
+
+/**
+ * Register validator
+ */
+controller.append([
+    'input[type=text]',
+    'input[type=password]',
+    'input[type=search]',
+    'input[type=email]',
+    'input[type=url]',
+    'input[type=tel]',
+    'input[type=color]',
+    'input[type=number]',
+    'input[type=datetime]',
+    'input[type=datetime-local]',
+    'input[type=date]',
+    'input[type=time]',
+    'input[type=week]',
+    'input[type=month]',
+    'input[type=radio]',
+    'input[type=checkbox]',
+    'select',
+    'textarea'
+].join(','), function (element) {
+    var value = element.locals.value,
+        required = prop(element, 'required'),
+        i, l;
+    for (i = 0, l = value.length; i < l; i++) {
+        if (value[i].length) {
+            return true;
+        }
+    }
+    return required ? 'required' : false;
+});
+
+
+(function () {
+
+    /**
+     * Native type patterns
+     * @see http://www.w3.org/TR/html-markup/datatypes.html
+     * @type {Object}
+     */
+    var patterns = {
+        tel   : /./,
+        url   : /^[a-z]+:\/\/.+/i,
+        email : /^[a-z\d.!#$%&’*+\/=?\^_`{|}~\-]+@[a-z\d\-]+(?:\.[a-z\d\-]+)*$/i,
+        color : /^#[a-f\d]{6}$/i
+    };
+
+    /**
+     * Get selectors
+     * @returns {string[]}
+     */
+    function selectors() {
+        var output = [],
+            k;
+        for (k in patterns) {
+            if (patterns.hasOwnProperty(k)) {
+                output.push('input[type=' + k + ']');
+            }
+        }
+        return output;
+    }
+
+    /**
+     * Register validator
+     */
+    controller.append(selectors().join(','), function (element) {
+        var type = $.trim(element.attr('type')).toLowerCase(),
+            pattern = patterns[type],
+            value = element.locals.value,
+            i, l;
+        for (i = 0, l = value.length; i < l; i++) {
+            if (!pattern.test(value[i])) {
+                return 'type';
+            }
+        }
+    });
+
+}());
+
+
+/**
+ * Register validator
+ */
+controller.append([
+    'input[type=text][pattern]',
+    'input[type=password][pattern]',
+    'input[type=search][pattern]',
+    'input[type=email][pattern]',
+    'input[type=url][pattern]',
+    'input[type=tel][pattern]'
+].join(','), function (element) {
+    var value = element.locals.value,
+        pattern = new RegExp('^' + element.attr('pattern') + '$'),
+        i, l;
+    for (i = 0, l = value.length; i < l; i++) {
+        if (!pattern.test(value[i])) {
+            return 'pattern';
+        }
+    }
+});
+
+
+/**
+ * Register minLength and maxLength validator
+ */
+controller.append([
+    'input[type=text][minlength]',
+    'input[type=text][maxlength]',
+    'input[type=password][minlength]',
+    'input[type=password][maxlength]',
+    'input[type=search][minlength]',
+    'input[type=search][maxlength]',
+    'input[type=email][minlength]',
+    'input[type=email][maxlength]',
+    'input[type=url][minlength]',
+    'input[type=url][maxlength]',
+    'input[type=tel][minlength]',
+    'input[type=tel][maxlength]',
+    'textarea[minlength]',
+    'textarea[maxlength]'
+].join(','), function (element) {
+    var value = element.locals.value,
+        minLength = parseInt(element.attr('minlength'), 10),
+        maxLength = parseInt(element.attr('maxlength'), 10),
+        i, l;
+    for (i = 0, l = value.length; i < l; i++) {
+        if (value[i].length < minLength) {
+            return 'minlength';
+        }
+        if (value[i].length > maxLength) {
+            return 'maxlength';
+        }
+    }
+});
+
+
+(function () {
 
     var patterns, config;
 
@@ -495,3 +798,91 @@
     });
 
 }());
+
+
+(function () {
+
+    /**
+     * Escapes string to be used in regular expressions.
+     * @param {string} text
+     * @return {string}
+     */
+    function regexEscape(text) {
+        return String(text).replace(/[-[\]\/{}()*+?.\\^$|]/g, '\\$&');
+    }
+
+    /**
+     * Converts glob to regular expression object.
+     * @param {string} glob
+     * @param {string} [options]
+     * @returns {RegExp}
+     */
+    function glob2regex(glob, options) {
+        glob = regexEscape(glob);
+        glob = glob.replace(/(\\+)([^\\]?)|([*?#])/g, function (match, escape) {
+            var letter = arguments[2] + arguments[3],
+                regexEscaped = escape.length % 2 && !/[*?]/.test(letter),
+                globEscaped = (escape.length - escape.length % 2) / 2 % 2;
+            escape = escape.substring(globEscaped, escape.length / 2 + regexEscaped);
+            if (letter === '*') {
+                letter = globEscaped ? '\\*' : '.*';
+            } else if (letter === '?') {
+                letter = globEscaped ? '\\?' : '.';
+            } else if (letter === '#') {
+                letter = globEscaped ? '#' : '\\d';
+            }
+            return escape + letter;
+        });
+        return new RegExp(glob, options);
+    }
+
+    /**
+     * Register validator
+     */
+    controller.append('input[type=file]', function (element) {
+        var value = element.locals.value,
+            required = prop(element, 'required'),
+            accepts, typeIndex, typeLength, fileIndex, fileLength;
+        if (!value.length && required) {
+            return'required';
+        }
+        accepts = $.trim(element.attr('accept')).split(/|,/);
+        $.each(accepts, function (index, accept) {
+            accepts[index] = glob2regex(accept);
+        });
+        fileLength = value.length;
+        typeLength = accepts.length;
+        for (fileIndex = 0; fileIndex < fileLength; fileIndex++) {
+            for (typeIndex = 0; typeIndex < typeLength; typeIndex++) {
+                if (accepts[typeIndex].test(value[fileIndex].type)) {
+                    break;
+                }
+            }
+            if (typeIndex === typeLength) {
+                return 'accept';
+            }
+        }
+    });
+
+}());
+
+
+/**
+ * jQuery module to validate all inputs contained by the selection and there nodes
+ * @see http://www.w3.org/html/wg/drafts/html/master/forms.html#the-input-element
+ * @see http://www.w3.org/TR/html-markup/datatypes.html
+ * @param {boolean} [notify=false]
+ * @returns {promise}
+ */
+$.fn.validatingInputs = function (notify) {
+    var elements = this.find(':input').add(this.filter(':input'));
+    return controller.validate(elements, notify);
+};
+
+/**
+ * Make the controller available to the outsiders
+ * @type {$.Validating}
+ */
+$.fn.validatingInputs.controller = controller;
+
+}(jQuery));
