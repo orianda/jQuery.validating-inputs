@@ -31,7 +31,7 @@
   "dependencies": {
     "jquery": "~2.1.3",
     "jquery.values": "~1.0.0",
-    "jquery.validating": "~1.0.0"
+    "jquery.validating": "~2.0.0"
   },
   "devDependencies": {
     "qunit": "~1.17.1"
