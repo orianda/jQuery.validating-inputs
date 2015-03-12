@@ -2,7 +2,7 @@
  * jQuery.validating-inputs
  * jQuery plugin to validate form input elements
  *
- * @version v1.0.1
+ * @version v1.0.2
  * @link https://github.com/orianda/jQuery.validating-inputs
  * @author Orianda <orianda@paan.de>
  * @license MIT
@@ -120,16 +120,15 @@ controller.append([
      * @param {jQuery} element
      */
     function trim(element) {
-        var values = element.locals.value;
-        $.each(values, function (index, value) {
-            value = $.trim(value);
-            if (value.length) {
-                values[index] = value;
-            } else {
-                delete values[index];
+        var value = element.locals.value,
+            index = value.length - 1;
+        for (index; index >= 0; index--) {
+            value[index] = $.trim(value[index]);
+            if (value[index].length === 0) {
+                value.splice(index, 1);
             }
-        });
-        element.val(values.join(','));
+        }
+        element.val(value.join(','));
     }
 
     /**

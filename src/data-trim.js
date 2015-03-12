@@ -14,16 +14,15 @@
      * @param {jQuery} element
      */
     function trim(element) {
-        var values = element.locals.value;
-        $.each(values, function (index, value) {
-            value = $.trim(value);
-            if (value.length) {
-                values[index] = value;
-            } else {
-                delete values[index];
+        var value = element.locals.value,
+            index = value.length - 1;
+        for (index; index >= 0; index--) {
+            value[index] = $.trim(value[index]);
+            if (value[index].length === 0) {
+                value.splice(index, 1);
             }
-        });
-        element.val(values.join(','));
+        }
+        element.val(value.join(','));
     }
 
     /**
