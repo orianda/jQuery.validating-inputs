@@ -20,7 +20,8 @@
              * @type {Object}
              */
             config = {
-                '<input/>'                                                             : {
+                //todo check validation of multiple emails (because of trim needs to remove empty ones from values)
+                '<input/>'                                                                         : {
                     disabled   : {
                         pass : false
                     },
@@ -226,23 +227,24 @@
                     }
                 },
                 '<input type="email"/>'                                                            : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : 'test@example.com'
                     },
-                    type     : {
+                    trimMultiple : {},
+                    type         : {
                         pass : false
                     },
-                    pattern  : {
+                    pattern      : {
                         pass    : false,
                         valid   : 'text@example.com',
                         invalid : 'test@example.com',
                         pattern : 'text@example[.]com'
                     },
-                    length   : {
+                    length       : {
                         pass     : false,
                         minValue : 'a@w.de',
                         hepValue : 'a1234@a1234.de',
@@ -380,18 +382,18 @@
                     }
                 },
                 '<input type="datetime"/>'                                                         : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    trim     : {
+                    trim         : {
                         value : ' space ',
                         pass  : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : '2012-12-12T12:12:00Z'
                     },
-                    type     : {
+                    type         : {
                         pass : false
                     },
                     stepNative   : {
@@ -420,18 +422,18 @@
                     }
                 },
                 '<input type="datetime-local"/>'                                                   : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    trim     : {
+                    trim         : {
                         value : ' space ',
                         pass  : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : '2012-12-12T12:12:00'
                     },
-                    type     : {
+                    type         : {
                         pass : false
                     },
                     stepNative   : {
@@ -460,18 +462,18 @@
                     }
                 },
                 '<input type="date"/>'                                                             : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    trim     : {
+                    trim         : {
                         value : ' space ',
                         pass  : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : '2012-12-12'
                     },
-                    type     : {
+                    type         : {
                         pass : false
                     },
                     stepNative   : {
@@ -500,18 +502,18 @@
                     }
                 },
                 '<input type="time"/>'                                                             : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    trim     : {
+                    trim         : {
                         value : ' space ',
                         pass  : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : '12:12:00'
                     },
-                    type     : {
+                    type         : {
                         pass : false
                     },
                     stepNative   : {
@@ -540,18 +542,18 @@
                     }
                 },
                 '<input type="week"/>'                                                             : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    trim     : {
+                    trim         : {
                         value : ' space ',
                         pass  : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : '2012-W12'
                     },
-                    type     : {
+                    type         : {
                         pass : false
                     },
                     stepNative   : {
@@ -580,18 +582,18 @@
                     }
                 },
                 '<input type="month"/>'                                                            : {
-                    disabled : {
+                    disabled     : {
                         pass : false
                     },
-                    trim     : {
+                    trim         : {
                         value : ' space ',
                         pass  : false
                     },
-                    required : {
+                    required     : {
                         pass  : false,
                         value : '2012-12'
                     },
-                    type     : {
+                    type         : {
                         pass : false
                     },
                     stepNative   : {
@@ -674,6 +676,43 @@
                         hepValue : '123456789012345',
                         maxValue : '12345678901234567890123456'
                     }
+                },
+                '<input type="button"/>'                                                           : {
+                    disabled   : {
+                        pass : true
+                    },
+                    required   : {
+                        pass  : true,
+                        value : 'test'
+                    },
+                    type       : {
+                        pass : true
+                    },
+                    pattern    : {
+                        pass    : true,
+                        valid   : 'katze',
+                        invalid : 'miau',
+                        pattern : 'katze'
+                    },
+                    length     : {
+                        pass     : true,
+                        minValue : '123',
+                        hepValue : '123456789012345',
+                        maxValue : '12345678901234567890123456'
+                    },
+                    quantity   : {
+                        pass     : true,
+                        min      : 8,
+                        max      : 12,
+                        minValue : 5,
+                        hopValue : 10,
+                        maxValue : 15
+                    },
+                    stepNative : {
+                        pass      : true,
+                        passValue : 10,
+                        failValue : 10.5
+                    }
                 }
             };
 
@@ -722,7 +761,6 @@
                  */
                 trim : function (input, config, assert) {
                     input.val(config.value);
-                    window.console && window.console.log(input.attr('type'),input.val());
                     assert.equal(input.val(), config.value, 'init');
                     input.validatingInputs().then(function () {
                         assert.ok(config.pass, 'valid');
@@ -731,9 +769,7 @@
                         assert.ok(!config.pass, 'fails');
                         assert.equal(error, 'type', 'fail type');
                     });
-                    window.console && window.console.log(input.attr('type'),input.val());
                     input.data('trim', true);
-                    window.console && window.console.log(input.attr('type'),input.val());
                     input.validatingInputs().then(function () {
                         assert.ok(config.pass, 'valid');
                         assert.equal(input.val(), $.trim(config.value), 'done');
@@ -741,7 +777,45 @@
                         assert.ok(!config.pass, 'fails');
                         assert.equal(input.val(), $.trim(config.value), 'done');
                     });
-                    window.console && window.console.log(input.attr('type'),input.val());
+                },
+
+                trimMultiple : function (input, config, assert) {
+                    window.console && window.console.log('hallo');
+                    input.prop('multiple', true).val('hallo@eumel,hallo@eumel');
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'valid');
+                        assert.equal(input.val(), 'hallo@eumel,hallo@eumel');
+                    }, function (error) {
+                        assert.ok(false, 'fails');
+                        assert.equal(error, undefined);
+                    });
+
+                    input.val(' hallo@eumel , hallo@eumel ');
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'valid');
+                        assert.equal(input.val(), 'hallo@eumel,hallo@eumel');
+                    }, function (error) {
+                        assert.ok(false, 'fails');
+                        assert.equal(error, undefined);
+                    });
+
+                    input.val(',hallo@eumel,,hallo@eumel,');
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'valid');
+                        assert.equal(input.val(), 'hallo@eumel,hallo@eumel');
+                    }, function (error) {
+                        assert.ok(false, 'fails');
+                        assert.equal(error, undefined);
+                    });
+
+                    input.val('  ,  ,  ,  hallo@eumel  ,  ,  ,  ,hallo@eumel, , , ,,, ,');
+                    input.validatingInputs().then(function () {
+                        assert.ok(true, 'valid');
+                        assert.equal(input.val(), 'hallo@eumel,hallo@eumel');
+                    }, function (error) {
+                        assert.ok(false, 'fails');
+                        assert.equal(error, undefined);
+                    });
                 },
 
                 /**
@@ -1001,9 +1075,6 @@
             });
 
             $.each(config, function (html, config) {
-                if(html!=='<input/>') {
-                    return;
-                }
                 $.each(config, function (name, config) {
                     QUnit.test('Test ' + name + ' for ' + html, function (assert) {
                         var input = $(html);
