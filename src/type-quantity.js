@@ -468,12 +468,13 @@
         'input[type=week]',
         'input[type=month]'
     ].join(','), function (element) {
-        var type = $.trim(element.attr('type')).toLowerCase(),
-            min = config[type].parse(element.attr('min')),
-            max = config[type].parse(element.attr('max')),
-            step = $.trim(element.attr('step')),
-            value = config[type].parse(element.locals.value[0]),
-            gait, base, exp;
+        var type, min, max, step, value, gait, base, exp;
+        element = $(element);
+        type = $.trim(element.attr('type')).toLowerCase();
+        min = config[type].parse(element.attr('min'));
+        max = config[type].parse(element.attr('max'));
+        step = $.trim(element.attr('step'));
+        value = config[type].parse(this.value[0]);
         if (isNaN(value)) {
             return 'type';
         } else if (min > value) {

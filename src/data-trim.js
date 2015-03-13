@@ -14,7 +14,7 @@
      * @param {jQuery} element
      */
     function trim(element) {
-        var value = element.locals.value,
+        var value = this.value,
             index = value.length - 1;
         for (index; index >= 0; index--) {
             value[index] = $.trim(value[index]);
@@ -22,7 +22,7 @@
                 value.splice(index, 1);
             }
         }
-        element.val(value.join(','));
+        $(element).val(value.join(','));
     }
 
     /**
@@ -54,9 +54,9 @@
         'input[type=search]',
         'textarea'
     ].join(','), function (element) {
-        var trimValue = $.trim(element.data('trim'));
+        var trimValue = $.trim($(element).data('trim'));
         if (regex.test(trimValue)) {
-            trim(element);
+            trim.call(this, element);
         }
     });
 

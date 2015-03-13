@@ -40,12 +40,12 @@ function isUndefined(value) {
  * Prepare controller for subsequent validators
  */
 controller.append('*', function (element) {
-    var name = element.attr('name') || '',
-        value = element.values()[name];
-    element.locals = {
-        name  : name,
-        value : value instanceof Array ? value : isUndefined(value) ? [] : [value]
-    };
+    var name, value;
+    element = $(element);
+    name = element.attr('name') || '';
+    value = element.values()[name];
+    this.name = name;
+    this.value = value instanceof Array ? value : isUndefined(value) ? [] : [value];
 });
 
 
@@ -53,6 +53,7 @@ controller.append('*', function (element) {
  * Prevent validating if the input is disabled
  */
 controller.append('*', function (element) {
+    element = $(element);
     while (element.length) {
         if (prop(element, 'disabled')) {
             return false;
@@ -75,7 +76,7 @@ controller.append('*', function (element) {
      * @param {jQuery} element
      */
     function trim(element) {
-        var value = element.locals.value,
+        var value = this.value,
             index = value.length - 1;
         for (index; index >= 0; index--) {
             value[index] = $.trim(value[index]);
@@ -83,7 +84,7 @@ controller.append('*', function (element) {
                 value.splice(index, 1);
             }
         }
-        element.val(value.join(','));
+        $(element).val(value.join(','));
     }
 
     /**
@@ -115,9 +116,9 @@ controller.append('*', function (element) {
         'input[type=search]',
         'textarea'
     ].join(','), function (element) {
-        var trimValue = $.trim(element.data('trim'));
+        var trimValue = $.trim($(element).data('trim'));
         if (regex.test(trimValue)) {
-            trim(element);
+            trim.call(this, element);
         }
     });
 
@@ -148,9 +149,10 @@ controller.append([
     'select',
     'textarea'
 ].join(','), function (element) {
-    var value = element.locals.value,
-        required = prop(element, 'required'),
-        i, l;
+    var value = this.value,
+        required, i, l;
+    element = $(element);
+    required = prop(element, 'required');
     for (i = 0, l = value.length; i < l; i++) {
         if (value[i].length) {
             return true;
@@ -193,10 +195,11 @@ controller.append([
      * Register validator
      */
     controller.append(selectors().join(','), function (element) {
-        var type = $.trim(element.attr('type')).toLowerCase(),
-            pattern = patterns[type],
-            value = element.locals.value,
-            i, l;
+        var value = this.value,
+            type, pattern, i, l;
+        element = $(element);
+        type = $.trim(element.attr('type')).toLowerCase();
+        pattern = patterns[type];
         for (i = 0, l = value.length; i < l; i++) {
             if (!pattern.test(value[i])) {
                 return 'type';
@@ -219,9 +222,10 @@ controller.append([
     'input[type=url][pattern]',
     'input[type=tel][pattern]'
 ].join(','), function (element) {
-    var value = element.locals.value,
-        pattern = new RegExp('^' + element.attr('pattern') + '$'),
-        i, l;
+    var value = this.value,
+        pattern, i, l;
+    element = $(element);
+    pattern = new RegExp('^' + element.attr('pattern') + '$');
     for (i = 0, l = value.length; i < l; i++) {
         if (!pattern.test(value[i])) {
             return 'pattern';
@@ -251,10 +255,11 @@ controller.append([
     'textarea[minlength]',
     'textarea[maxlength]'
 ].join(','), function (element) {
-    var value = element.locals.value,
-        minLength = parseInt(element.attr('minlength'), 10),
-        maxLength = parseInt(element.attr('maxlength'), 10),
-        i, l;
+    var value = this.value,
+        minLength, maxLength, i, l;
+    element = $(element);
+    minLength = parseInt(element.attr('minlength'), 10);
+    maxLength = parseInt(element.attr('maxlength'), 10);
     for (i = 0, l = value.length; i < l; i++) {
         if (value[i].length < minLength) {
             return 'minlength';
@@ -733,12 +738,13 @@ controller.append([
         'input[type=week]',
         'input[type=month]'
     ].join(','), function (element) {
-        var type = $.trim(element.attr('type')).toLowerCase(),
-            min = config[type].parse(element.attr('min')),
-            max = config[type].parse(element.attr('max')),
-            step = $.trim(element.attr('step')),
-            value = config[type].parse(element.locals.value[0]),
-            gait, base, exp;
+        var type, min, max, step, value, gait, base, exp;
+        element = $(element);
+        type = $.trim(element.attr('type')).toLowerCase();
+        min = config[type].parse(element.attr('min'));
+        max = config[type].parse(element.attr('max'));
+        step = $.trim(element.attr('step'));
+        value = config[type].parse(this.value[0]);
         if (isNaN(value)) {
             return 'type';
         } else if (min > value) {
@@ -802,11 +808,12 @@ controller.append([
      * Register validator
      */
     controller.append('input[type=file]', function (element) {
-        var value = element.locals.value,
-            required = prop(element, 'required'),
-            accepts, typeIndex, typeLength, fileIndex, fileLength;
+        var value = this.value,
+            required, accepts, typeIndex, typeLength, fileIndex, fileLength;
+        element = $(element);
+        required = prop(element, 'required');
         if (!value.length && required) {
-            return'required';
+            return 'required';
         }
         accepts = $.trim(element.attr('accept')).split(/|,/);
         $.each(accepts, function (index, accept) {

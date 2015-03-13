@@ -5,6 +5,7 @@
  */
 controller.append('*', function (element) {
     "use strict";
+    element = $(element);
     while (element.length) {
         if (prop(element, 'disabled')) {
             return false;

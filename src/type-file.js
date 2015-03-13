@@ -41,11 +41,12 @@
      * Register validator
      */
     controller.append('input[type=file]', function (element) {
-        var value = element.locals.value,
-            required = prop(element, 'required'),
-            accepts, typeIndex, typeLength, fileIndex, fileLength;
+        var value = this.value,
+            required, accepts, typeIndex, typeLength, fileIndex, fileLength;
+        element = $(element);
+        required = prop(element, 'required');
         if (!value.length && required) {
-            return'required';
+            return 'required';
         }
         accepts = $.trim(element.attr('accept')).split(/|,/);
         $.each(accepts, function (index, accept) {

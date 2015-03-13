@@ -22,10 +22,11 @@ controller.append([
     'textarea[maxlength]'
 ].join(','), function (element) {
     "use strict";
-    var value = element.locals.value,
-        minLength = parseInt(element.attr('minlength'), 10),
-        maxLength = parseInt(element.attr('maxlength'), 10),
-        i, l;
+    var value = this.value,
+        minLength, maxLength, i, l;
+    element = $(element);
+    minLength = parseInt(element.attr('minlength'), 10);
+    maxLength = parseInt(element.attr('maxlength'), 10);
     for (i = 0, l = value.length; i < l; i++) {
         if (value[i].length < minLength) {
             return 'minlength';

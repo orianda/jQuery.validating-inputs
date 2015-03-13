@@ -52,7 +52,7 @@
     "smarttabs": false,
     "sub": false,
     "supernew": false,
-    "validthis": false,
+    "validthis": true,
 
     "nomen": true,
     "onevar": true,

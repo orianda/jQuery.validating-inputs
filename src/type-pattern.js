@@ -34,10 +34,11 @@
      * Register validator
      */
     controller.append(selectors().join(','), function (element) {
-        var type = $.trim(element.attr('type')).toLowerCase(),
-            pattern = patterns[type],
-            value = element.locals.value,
-            i, l;
+        var value = this.value,
+            type, pattern, i, l;
+        element = $(element);
+        type = $.trim(element.attr('type')).toLowerCase();
+        pattern = patterns[type];
         for (i = 0, l = value.length; i < l; i++) {
             if (!pattern.test(value[i])) {
                 return 'type';

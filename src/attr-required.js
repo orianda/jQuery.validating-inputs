@@ -25,9 +25,10 @@ controller.append([
     'textarea'
 ].join(','), function (element) {
     "use strict";
-    var value = element.locals.value,
-        required = prop(element, 'required'),
-        i, l;
+    var value = this.value,
+        required, i, l;
+    element = $(element);
+    required = prop(element, 'required');
     for (i = 0, l = value.length; i < l; i++) {
         if (value[i].length) {
             return true;
