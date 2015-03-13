@@ -2,7 +2,7 @@
  * jQuery.validating-inputs
  * jQuery plugin to validate form input elements
  *
- * @version v1.0.2
+ * @version v1.0.3
  * @link https://github.com/orianda/jQuery.validating-inputs
  * @author Orianda <orianda@paan.de>
  * @license MIT
@@ -39,30 +39,7 @@ function isUndefined(value) {
 /**
  * Prepare controller for subsequent validators
  */
-controller.append([
-    'input:not([type])',
-    'input[type=hidden]',
-    'input[type=text]',
-    'input[type=password]',
-    'input[type=search]',
-    'input[type=email]',
-    'input[type=url]',
-    'input[type=tel]',
-    'input[type=color]',
-    'input[type=number]',
-    'input[type=range]',
-    'input[type=datetime]',
-    'input[type=datetime-local]',
-    'input[type=date]',
-    'input[type=time]',
-    'input[type=week]',
-    'input[type=month]',
-    'input[type=radio]',
-    'input[type=checkbox]',
-    'input[type=file]',
-    'select',
-    'textarea'
-].join(','), function (element) {
+controller.append('*', function (element) {
     var name = element.attr('name') || '',
         value = element.values()[name];
     element.locals = {
@@ -75,29 +52,7 @@ controller.append([
 /**
  * Prevent validating if the input is disabled
  */
-controller.append([
-    'input:not([type])',
-    'input[type=text]',
-    'input[type=password]',
-    'input[type=search]',
-    'input[type=email]',
-    'input[type=url]',
-    'input[type=tel]',
-    'input[type=color]',
-    'input[type=number]',
-    'input[type=range]',
-    'input[type=datetime]',
-    'input[type=datetime-local]',
-    'input[type=date]',
-    'input[type=time]',
-    'input[type=week]',
-    'input[type=month]',
-    'input[type=radio]',
-    'input[type=checkbox]',
-    'input[type=file]',
-    'select',
-    'textarea'
-].join(','), function (element) {
+controller.append('*', function (element) {
     while (element.length) {
         if (prop(element, 'disabled')) {
             return false;
@@ -882,7 +837,30 @@ controller.append([
  * @returns {promise}
  */
 $.fn.validatingInputs = function (notify) {
-    var elements = this.find(':input').add(this.filter(':input'));
+    var elements = this.find(':input').add(this.filter(':input')).filter([
+        'input:not([type])',
+        'input[type=hidden]',
+        'input[type=text]',
+        'input[type=password]',
+        'input[type=search]',
+        'input[type=email]',
+        'input[type=url]',
+        'input[type=tel]',
+        'input[type=color]',
+        'input[type=number]',
+        'input[type=range]',
+        'input[type=datetime]',
+        'input[type=datetime-local]',
+        'input[type=date]',
+        'input[type=time]',
+        'input[type=week]',
+        'input[type=month]',
+        'input[type=radio]',
+        'input[type=checkbox]',
+        'input[type=file]',
+        'select',
+        'textarea'
+    ].join(','));
     return controller.validate(elements, notify);
 };
 

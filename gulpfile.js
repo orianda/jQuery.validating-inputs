@@ -40,7 +40,7 @@ gulp.task('build:script', 'Concatenate script files into one file and prepend th
     ])
         .pipe(replace(/\s*\/\*global\s.*?\*\//ig, ''))
         .pipe(replace(/\s*(["'])use strict\1;/ig, ''))
-        .pipe(concat(pkg.name + '-' + pkg.version + '.js'))
+        .pipe(concat(pkg.name + '.js'))
         .pipe(wrap({src : 'src/capsule.txt'}))
         .pipe(header(banner, {pkg : pkg}))
         .pipe(gulp.dest('dist'));
